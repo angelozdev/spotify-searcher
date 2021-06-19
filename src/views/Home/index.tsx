@@ -1,7 +1,14 @@
 import React from "react";
 
+import { Wrapper } from "components";
+import { Container } from "./home.styles";
+
 function Home() {
-  return <div>hola HOME</div>;
+  return (
+    <Container>
+      <Wrapper>Hola mundo</Wrapper>
+    </Container>
+  );
 }
 
 export default Home;
