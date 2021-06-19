@@ -1,6 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom";
 import App from "./App";
+import "normalize.css";
+import "styles/global.css";
 
 const container = document.getElementById("root");
 
