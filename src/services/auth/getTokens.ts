@@ -20,7 +20,7 @@ async function spotifyAuth(code: string) {
     data: searchParams,
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
   }).then(({ data }) => {
-    console.log("🚀 ~ file: index.ts ~ line 23 ~ spotifyAuth ~ data", data);
+    return data;
   });
 }
 

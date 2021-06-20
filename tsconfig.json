@@ -13,9 +13,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react",
-    "types": ["react/next", "react-dom/next"],
-    "baseUrl": "./src"
+    "jsx": "react-jsx",
+    "baseUrl": "./src",
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["./src"]
 }

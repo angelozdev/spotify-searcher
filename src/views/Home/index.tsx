@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 import { Wrapper } from "components";
 import {
@@ -15,10 +16,14 @@ import {
   Figure,
 } from "./home.styles";
 import { EnvironmentVariables } from "consts";
-import { auth } from "services";
+import { getTokens } from "services/auth";
+import { isAuthenticatedAtom } from "recoilState/auth/atoms";
 
 function Home() {
+  const isAuth = useRecoilValue(isAuthenticatedAtom);
+  const setIsAuth = useSetRecoilState(isAuthenticatedAtom);
   const { search } = useLocation();
+
   const handleLoginClick = () => {
     const { REDIRECT_URI, CLIENT_ID } = EnvironmentVariables;
     const SPOTIFY_URL = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
@@ -26,12 +31,32 @@ function Home() {
     window.location.replace(SPOTIFY_URL);
   };
 
+  const authenticateUser = async (code: string) => {
+    try {
+      const data = await getTokens(code);
+      console.log({ data });
+      setIsAuth(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     const urlParams = new URLSearchParams(search);
-    const spotifyCode = urlParams.get("code") || "";
+    const spotifyCode = urlParams.get("code");
 
-    spotifyCode && auth.getTokens(spotifyCode);
+    /* spotifyCode && authenticateUser(spotifyCode); */
+
+    setTimeout(() => {
+      setIsAuth(true);
+    }, 1000);
   }, [search]);
+
+  useEffect(() => {
+    if (isAuth) {
+      console.log("Hola mundo");
+    }
+  }, [isAuth]);
 
   return (
     <Container>
