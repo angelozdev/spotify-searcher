@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 import { Wrapper } from "components";
 import {
@@ -15,6 +16,20 @@ import {
 } from "./home.styles";
 
 function Home() {
+  const { search } = useLocation();
+  const handleLoginClick = () => {
+    const { VITE_SPOTIFY_CLIENT_ID, VITE_SPOTIFY_REDIRECT_URI } = import.meta
+      .env;
+    const SPOTIFY_URL = `https://accounts.spotify.com/authorize?client_id=${VITE_SPOTIFY_CLIENT_ID}&redirect_uri=${VITE_SPOTIFY_REDIRECT_URI}&response_type=code`;
+
+    window.location.replace(SPOTIFY_URL);
+  };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(search);
+    const spotifyCode = urlParams.get("code");
+  }, [search]);
+
   return (
     <Container>
       <Wrapper>
@@ -22,7 +37,7 @@ function Home() {
           <Content>
             <Title>Bienvenido de nuevo.</Title>
             <Subtitle>Identifícate para encontrar tu música favorita.</Subtitle>
-            <Button>
+            <Button onClick={handleLoginClick}>
               <ButtonText>Iniciar sesión</ButtonText>
             </Button>
           </Content>
