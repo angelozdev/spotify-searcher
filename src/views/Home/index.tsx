@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 
 import { Wrapper } from "components";
 import {
@@ -17,11 +17,10 @@ import {
 } from "./home.styles";
 import { EnvironmentVariables } from "consts";
 import { getTokens } from "services/auth";
-import { isAuthenticatedAtom } from "recoilState/auth/atoms";
+import { authAtom } from "recoilState/auth/atoms";
 
 function Home() {
-  const isAuth = useRecoilValue(isAuthenticatedAtom);
-  const setIsAuth = useSetRecoilState(isAuthenticatedAtom);
+  const [auth, setAuth] = useRecoilState(authAtom);
   const { search } = useLocation();
 
   const handleLoginClick = () => {
@@ -33,10 +32,23 @@ function Home() {
 
   const authenticateUser = async (code: string) => {
     try {
-      const data = await getTokens(code);
-      console.log({ data });
-      setIsAuth(true);
+      let options = {};
+
+      if (auth.refreshToken) {
+        options = { refresh_token: auth.refreshToken };
+      } else {
+        options = { code };
+      }
+
+      const { accessToken, refreshToken } = await getTokens(options);
+
+      setAuth({
+        isAuth: true,
+        accessToken,
+        refreshToken,
+      });
     } catch (error) {
+      setAuth((current) => ({ ...current, isAuth: false }));
       console.error(error);
     }
   };
@@ -45,18 +57,12 @@ function Home() {
     const urlParams = new URLSearchParams(search);
     const spotifyCode = urlParams.get("code");
 
-    /* spotifyCode && authenticateUser(spotifyCode); */
-
-    setTimeout(() => {
-      setIsAuth(true);
-    }, 1000);
+    spotifyCode && authenticateUser(spotifyCode);
   }, [search]);
 
   useEffect(() => {
-    if (isAuth) {
-      console.log("Hola mundo");
-    }
-  }, [isAuth]);
+    console.log({ auth });
+  });
 
   return (
     <Container>
