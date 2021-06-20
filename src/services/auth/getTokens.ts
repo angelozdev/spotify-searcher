@@ -10,7 +10,7 @@ interface Response {
 }
 
 interface Options {
-  code?: string;
+  code: string;
   refresh_token?: string;
 }
 
@@ -20,13 +20,14 @@ interface Params {
   client_id?: string;
   client_secret?: string;
   refresh_token?: string;
-  code?: string;
+  code: string;
 }
 
 async function getTokens({ code, refresh_token }: Options): Promise<Response> {
   const { REDIRECT_URI, CLIENT_ID, SECRET_ID } = EnvironmentVariables;
   let params: Params = {
-    grant_type: "authorization_code",
+    code,
+    grant_type: refresh_token ? "refresh_token" : "authorization_code",
     redirect_uri: REDIRECT_URI,
     client_id: CLIENT_ID,
     client_secret: SECRET_ID,
@@ -35,15 +36,6 @@ async function getTokens({ code, refresh_token }: Options): Promise<Response> {
   if (refresh_token) {
     params = { ...params, refresh_token };
   }
-
-  if (code) {
-    params = { ...params, code };
-  }
-
-  if (!refresh_token && !code) {
-    throw new Error("Missing a token or code");
-  }
-
   const searchParams = objectToParams(params);
 
   return axios({

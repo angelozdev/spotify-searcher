@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useHistory, useLocation } from "react-router-dom";
+import { useRecoilState, useRecoilSnapshot } from "recoil";
 
 import { Wrapper } from "components";
 import {
@@ -22,6 +22,7 @@ import { authAtom } from "recoilState/auth/atoms";
 function Home() {
   const [auth, setAuth] = useRecoilState(authAtom);
   const { search } = useLocation();
+  const history = useHistory();
 
   const handleLoginClick = () => {
     const { REDIRECT_URI, CLIENT_ID } = EnvironmentVariables;
@@ -32,21 +33,22 @@ function Home() {
 
   const authenticateUser = async (code: string) => {
     try {
-      let options = {};
+      let options = { code, refresh_token: "" };
 
       if (auth.refreshToken) {
-        options = { refresh_token: auth.refreshToken };
-      } else {
-        options = { code };
+        options = { ...options, refresh_token: auth.refreshToken };
       }
 
       const { accessToken, refreshToken } = await getTokens(options);
 
-      setAuth({
+      setAuth((prev) => ({
         isAuth: true,
         accessToken,
-        refreshToken,
-      });
+        refreshToken: prev.refreshToken ?? refreshToken,
+      }));
+
+      refreshToken &&
+        localStorage.setItem("refreshToken", JSON.stringify(refreshToken));
     } catch (error) {
       setAuth((current) => ({ ...current, isAuth: false }));
       console.error(error);
@@ -61,8 +63,10 @@ function Home() {
   }, [search]);
 
   useEffect(() => {
-    console.log({ auth });
-  });
+    if (auth.isAuth) {
+      return history.replace("/spotify");
+    }
+  }, [auth.isAuth]);
 
   return (
     <Container>
