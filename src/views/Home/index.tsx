@@ -14,20 +14,23 @@ import {
   Title,
   Figure,
 } from "./home.styles";
+import { EnvironmentVariables } from "consts";
+import { auth } from "services";
 
 function Home() {
   const { search } = useLocation();
   const handleLoginClick = () => {
-    const { VITE_SPOTIFY_CLIENT_ID, VITE_SPOTIFY_REDIRECT_URI } = import.meta
-      .env;
-    const SPOTIFY_URL = `https://accounts.spotify.com/authorize?client_id=${VITE_SPOTIFY_CLIENT_ID}&redirect_uri=${VITE_SPOTIFY_REDIRECT_URI}&response_type=code`;
+    const { REDIRECT_URI, CLIENT_ID } = EnvironmentVariables;
+    const SPOTIFY_URL = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
     window.location.replace(SPOTIFY_URL);
   };
 
   useEffect(() => {
     const urlParams = new URLSearchParams(search);
-    const spotifyCode = urlParams.get("code");
+    const spotifyCode = urlParams.get("code") || "";
+
+    spotifyCode && auth.getTokens(spotifyCode);
   }, [search]);
 
   return (

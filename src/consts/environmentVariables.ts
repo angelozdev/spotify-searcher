@@ -1,0 +1,13 @@
+const {
+  VITE_SPOTIFY_CLIENT_ID,
+  VITE_SPOTIFY_REDIRECT_URI,
+  VITE_SPOTIFY_CLIENT_SECRET,
+} = import.meta.env;
+
+const EnvironmentVariables = {
+  REDIRECT_URI: VITE_SPOTIFY_REDIRECT_URI,
+  CLIENT_ID: VITE_SPOTIFY_CLIENT_ID,
+  SECRET_ID: VITE_SPOTIFY_CLIENT_SECRET,
+};
+
+export default EnvironmentVariables;
