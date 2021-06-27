@@ -12,21 +12,18 @@ function PrivateRoute({ component, ...rest }: Props) {
   const { isAuth } = useRecoilValue(authAtom);
   const Component = component;
 
-  return (
-    <Route
-      {...rest}
-      render={() => {
-        if (!isAuth) {
-          return (
-            <Redirect
-              to={{ pathname: Routes.HOME, state: { from: rest.location } }}
-            />
-          );
-        }
+  if (!isAuth) {
+    return (
+      <Redirect
+        to={{ pathname: Routes.LOGIN, state: { from: rest.location } }}
+      />
+    );
+  }
 
-        return <Component />;
-      }}
-    />
+  return (
+    <Route {...rest}>
+      <Component />
+    </Route>
   );
 }
 

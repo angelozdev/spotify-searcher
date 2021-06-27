@@ -1,5 +1,5 @@
 enum Routes {
-  HOME = "/",
+  LOGIN = "/",
   SEARCH = "/search",
 }
 

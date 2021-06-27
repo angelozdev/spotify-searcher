@@ -15,7 +15,7 @@ import {
   Title,
   Figure,
 } from "./home.styles";
-import { EnvironmentVariables } from "consts";
+import { EnvironmentVariables, Routes } from "consts";
 import { getTokens } from "services/auth";
 import { authAtom } from "recoilState/auth/atoms";
 
@@ -51,7 +51,7 @@ function Home() {
       refreshToken &&
         localStorage.setItem("refreshToken", JSON.stringify(refreshToken));
 
-      history.replace("/search");
+      history.replace(Routes.SEARCH);
     } catch (error) {
       setAuth((current) => ({ ...current, isAuth: false }));
       console.error(error);
