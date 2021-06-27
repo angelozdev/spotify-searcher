@@ -10,19 +10,19 @@ import {
 } from "./home.styles";
 import { Wrapper, Button, Filters } from "components";
 import { useSearch } from "hooks";
-import { spotifyTypesAtom } from "recoilState/spotifyTypes";
+import { spotifyTypesSelector } from "recoilState/spotifyTypes/selectors";
 
 function Home() {
   // states
   const [searchValue, setSearchValue] = useState("");
-  const types = useRecoilValue(spotifyTypesAtom);
+  const type = useRecoilValue(spotifyTypesSelector);
   const [{ data, status, error }, getData] = useSearch();
 
   // helpers methods
   const handleSearchSubmit = (event: FormEvent) => {
     event.preventDefault();
     if (!searchValue) return;
-    getData({ query: searchValue, type: types });
+    getData({ query: searchValue, type });
   };
 
   const handleSearchValueChange = (event: ChangeEvent<HTMLInputElement>) => {

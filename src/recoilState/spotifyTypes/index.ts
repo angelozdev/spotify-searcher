@@ -1,6 +1,2 @@
-import { atom } from "recoil";
-
-export const spotifyTypesAtom = atom({
-  default: "",
-  key: "spotifyTypesAtom",
-});
+export * as atoms from "./atoms";
+export * as selectors from "./selectors";
