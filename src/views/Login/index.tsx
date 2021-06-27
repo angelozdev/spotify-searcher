@@ -78,10 +78,6 @@ function Home() {
     code && authenticateUser(code);
   }, [search]);
 
-  useEffect(() => {
-    console.log("RENDER HOME", { auth }, { isLoading });
-  });
-
   if (isLoading) {
     return <p>Loading...</p>;
   }

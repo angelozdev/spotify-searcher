@@ -27,6 +27,7 @@ function Filters() {
             <Checkbox
               onChange={handleCheckChange}
               type="checkbox"
+              disabled={name !== "track"}
               name={name}
               value={name}
             />

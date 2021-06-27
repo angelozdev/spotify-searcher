@@ -75,7 +75,6 @@ function useSearch(): [
 
   const getData = useCallback((options: Omit<SearchOptions, "token">) => {
     dispatch({ type: ActionTypes.GET_DATA_LOADING });
-
     search({ ...options, token: accessToken })
       .then((data) => {
         dispatch({ type: ActionTypes.GET_DATA_SUCCESS, payload: data });
