@@ -1,11 +1,19 @@
 export interface SearchOptions {
   query: string;
-  type: "track" | "artist" | "track,artist" | "artist,track";
+  type: string;
   token: string;
   market?: "US";
   limit?: number;
   offset?: number;
 }
+
+export type Type =
+  | "track"
+  | "artist"
+  | "album"
+  | "playlist"
+  | "show"
+  | "episode";
 
 export type Statuses = "IDLE" | "LOADING" | "FAILURE" | "SUCCESS";
 
@@ -99,5 +107,5 @@ export interface Tracks extends SpotifyItem {
     track_number: number;
     type: string;
     uri: string;
-  };
+  }[];
 }

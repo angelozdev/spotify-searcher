@@ -7,7 +7,10 @@ import { search } from "services/search";
 import { Artists, SearchOptions, Statuses, Tracks } from "types";
 
 interface InitialState {
-  data: Artists | Tracks | null;
+  data: {
+    artists?: Artists;
+    tracks?: Tracks;
+  } | null;
   error: AxiosError | null;
   status: Statuses;
 }
@@ -74,7 +77,7 @@ function useSearch(): [
     dispatch({ type: ActionTypes.GET_DATA_LOADING });
 
     search({ ...options, token: accessToken })
-      .then((data: Tracks | Artists) => {
+      .then((data) => {
         dispatch({ type: ActionTypes.GET_DATA_SUCCESS, payload: data });
       })
       .catch((error) => {

@@ -1,4 +1,5 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 
 import {
   Container,
@@ -7,19 +8,21 @@ import {
   SearchInput,
   SearchInputContainer,
 } from "./home.styles";
-import { Wrapper, Button } from "components";
+import { Wrapper, Button, Filters } from "components";
 import { useSearch } from "hooks";
+import { spotifyTypesAtom } from "recoilState/spotifyTypes";
 
 function Home() {
   // states
   const [searchValue, setSearchValue] = useState("");
+  const types = useRecoilValue(spotifyTypesAtom);
   const [{ data, status, error }, getData] = useSearch();
 
   // helpers methods
   const handleSearchSubmit = (event: FormEvent) => {
     event.preventDefault();
     if (!searchValue) return;
-    getData({ query: searchValue, type: "track" });
+    getData({ query: searchValue, type: types });
   };
 
   const handleSearchValueChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -53,6 +56,7 @@ function Home() {
             Buscar...
           </Button>
         </SearchForm>
+        <Filters />
       </Wrapper>
     </Container>
   );
