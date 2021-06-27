@@ -2,10 +2,8 @@ import { memo, useCallback, useEffect, useState } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import { useRecoilState } from "recoil";
 
-import { Wrapper } from "components";
+import { Wrapper, Button } from "components";
 import {
-  Button,
-  ButtonText,
   Container,
   Content,
   Image,
@@ -95,9 +93,7 @@ function Home() {
           <Content>
             <Title>Bienvenido de nuevo.</Title>
             <Subtitle>Identifícate para encontrar tu música favorita.</Subtitle>
-            <Button onClick={handleLoginClick}>
-              <ButtonText>Iniciar sesión</ButtonText>
-            </Button>
+            <Button onClick={handleLoginClick}>Iniciar sesión</Button>
           </Content>
 
           <ImageContainer>

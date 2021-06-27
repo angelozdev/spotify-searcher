@@ -25,30 +25,6 @@ export const Subtitle = styled.h2`
   font-size: 1.5rem;
 `;
 
-export const Button = styled.button`
-  padding: 1rem;
-  border-radius: 2rem;
-  outline: none;
-  border: none;
-  cursor: pointer;
-  background-color: #1ed760;
-  transition: 300ms all ease;
-
-  &:hover {
-    transform: scale(1.01);
-  }
-
-  &:active {
-    transform: scale(0.99);
-  }
-`;
-
-export const ButtonText = styled.span`
-  padding: 0 2rem;
-  text-transform: uppercase;
-  color: white;
-`;
-
 export const ImageContainer = styled.div`
   height: 100%;
 `;
