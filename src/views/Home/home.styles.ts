@@ -11,7 +11,7 @@ export const Header = styled.div`
   height: min(40vh, 300px);
 `;
 
-export const Search = styled.form`
+export const SearchForm = styled.form`
   padding: 1rem 0;
   display: flex;
   align-items: center;
@@ -27,15 +27,18 @@ export const SearchInputContainer = styled.div`
 
   &:focus-within::before {
     visibility: visible;
+    opacity: 1;
   }
 
   &::before {
+    transition: opacity ease 300ms;
+    opacity: 0;
     visibility: hidden;
     content: "";
     position: absolute;
     inset: -3px;
     border-radius: 2rem;
-    border: 1px solid gray;
+    border: 1px solid #e3e3e3;
   }
 `;
 
@@ -46,4 +49,8 @@ export const SearchInput = styled.input`
   background: transparent;
   position: relative;
   z-index: 10;
+
+  &::placeholder {
+    color: #acabab;
+  }
 `;

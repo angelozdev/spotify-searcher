@@ -1,7 +1,7 @@
 import {
   Container,
   Header,
-  Search,
+  SearchForm,
   SearchInput,
   SearchInputContainer,
 } from "./home.styles";
@@ -20,12 +20,15 @@ function Home() {
         }}
       ></Header>
       <Wrapper>
-        <Search onSubmit={handleSearchSubmit}>
+        <SearchForm onSubmit={handleSearchSubmit}>
           <SearchInputContainer>
-            <SearchInput type="text" placeholder="Search..." />
+            <SearchInput
+              type="text"
+              placeholder="Busca tu canción favorita..."
+            />
           </SearchInputContainer>
-          <Button size="small">Search...</Button>
-        </Search>
+          <Button size="small">Buscar...</Button>
+        </SearchForm>
       </Wrapper>
     </Container>
   );

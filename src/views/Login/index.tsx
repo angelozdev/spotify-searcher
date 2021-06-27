@@ -12,7 +12,7 @@ import {
   Subtitle,
   Title,
   Figure,
-} from "./home.styles";
+} from "./login.styles";
 import { EnvironmentVariables, Routes } from "consts";
 import { getTokens } from "services/auth";
 import { authAtom } from "recoilState/auth/atoms";
