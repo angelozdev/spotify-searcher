@@ -1,6 +1,7 @@
-import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import * as constants from "consts";
+import { PrivateRoute } from "components";
 import { Home } from "views";
 
 function Routes() {
@@ -8,9 +9,11 @@ function Routes() {
     <Router>
       <Switch>
         <Route exact path={constants.Routes.HOME} component={Home} />
-        <Route exact path="/spotify">
-          <h1>Estás registrado :D</h1>
-        </Route>
+        <PrivateRoute
+          exact
+          path={constants.Routes.SEARCH}
+          component={() => <p>Hola mundo!</p>}
+        />
       </Switch>
     </Router>
   );

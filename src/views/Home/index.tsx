@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { useHistory, useLocation } from "react-router-dom";
-import { useRecoilState, useRecoilSnapshot } from "recoil";
+import { memo, useCallback, useEffect, useState } from "react";
+import { useLocation, useHistory } from "react-router-dom";
+import { useRecoilState } from "recoil";
 
 import { Wrapper } from "components";
 import {
@@ -20,19 +20,21 @@ import { getTokens } from "services/auth";
 import { authAtom } from "recoilState/auth/atoms";
 
 function Home() {
+  const [isLoading, setIsLoading] = useState(true);
   const [auth, setAuth] = useRecoilState(authAtom);
   const { search } = useLocation();
   const history = useHistory();
 
-  const handleLoginClick = () => {
+  const handleLoginClick = useCallback(() => {
     const { REDIRECT_URI, CLIENT_ID } = EnvironmentVariables;
     const SPOTIFY_URL = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
     window.location.replace(SPOTIFY_URL);
-  };
+  }, []);
 
   const authenticateUser = async (code: string) => {
     try {
+      setIsLoading(true);
       let options = { code, refresh_token: "" };
 
       if (auth.refreshToken) {
@@ -40,7 +42,6 @@ function Home() {
       }
 
       const { accessToken, refreshToken } = await getTokens(options);
-
       setAuth((prev) => ({
         isAuth: true,
         accessToken,
@@ -49,24 +50,43 @@ function Home() {
 
       refreshToken &&
         localStorage.setItem("refreshToken", JSON.stringify(refreshToken));
+
+      history.replace("/search");
     } catch (error) {
       setAuth((current) => ({ ...current, isAuth: false }));
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const setCode = (spotifyCode: string) => {
+    if (spotifyCode) {
+      return spotifyCode;
+    } else if (auth.refreshToken) {
+      return auth.refreshToken;
+    }
+
+    return null;
   };
 
   useEffect(() => {
     const urlParams = new URLSearchParams(search);
-    const spotifyCode = urlParams.get("code");
+    const spotifyCode = urlParams.get("code") || "";
 
-    spotifyCode && authenticateUser(spotifyCode);
+    const code = setCode(spotifyCode);
+
+    !code && setIsLoading(false);
+    code && authenticateUser(code);
   }, [search]);
 
   useEffect(() => {
-    if (auth.isAuth) {
-      return history.replace("/spotify");
-    }
-  }, [auth.isAuth]);
+    console.log("RENDER HOME", { auth }, { isLoading });
+  });
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <Container>
@@ -91,4 +111,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default memo(Home);
