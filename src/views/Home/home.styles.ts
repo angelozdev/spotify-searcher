@@ -53,4 +53,9 @@ export const SearchInput = styled.input`
   &::placeholder {
     color: #acabab;
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 `;

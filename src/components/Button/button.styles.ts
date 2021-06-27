@@ -27,6 +27,11 @@ export const Button = styled.button`
   &:active {
     transform: scale(0.99);
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: lightgray;
+  }
 `;
 
 export const ButtonText = styled.span`

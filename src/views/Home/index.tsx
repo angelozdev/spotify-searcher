@@ -1,3 +1,5 @@
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+
 import {
   Container,
   Header,
@@ -6,12 +8,29 @@ import {
   SearchInputContainer,
 } from "./home.styles";
 import { Wrapper, Button } from "components";
-import { FormEvent } from "react";
+import { useSearch } from "hooks";
 
 function Home() {
+  // states
+  const [searchValue, setSearchValue] = useState("");
+  const [{ data, status, error }, getData] = useSearch();
+
+  // helpers methods
   const handleSearchSubmit = (event: FormEvent) => {
     event.preventDefault();
+    if (!searchValue) return;
+    getData({ query: searchValue, type: "track" });
   };
+
+  const handleSearchValueChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setSearchValue(value);
+  };
+
+  useEffect(() => {
+    console.log({ status, data, error });
+  }, [status]);
+
   return (
     <Container>
       <Header
@@ -23,11 +42,16 @@ function Home() {
         <SearchForm onSubmit={handleSearchSubmit}>
           <SearchInputContainer>
             <SearchInput
+              disabled={status === "LOADING"}
               type="text"
               placeholder="Busca tu canción favorita..."
+              value={searchValue}
+              onChange={handleSearchValueChange}
             />
           </SearchInputContainer>
-          <Button size="small">Buscar...</Button>
+          <Button disabled={status === "LOADING"} size="small">
+            Buscar...
+          </Button>
         </SearchForm>
       </Wrapper>
     </Container>
