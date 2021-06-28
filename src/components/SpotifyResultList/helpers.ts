@@ -6,32 +6,41 @@ type Items = {
 }
 
 const setTracks = ({ items }: Tracks): ItemProps[] => {
-  return items.map(({ album, id, external_urls, name, artists }) => {
-    const { release_date: releaseDate, images } = album
-    const previewImage = images.find((img) => img.url)?.url || ''
-    const artistNames = artists.map((artist) => artist.name).join(', ')
-    return {
-      id,
-      previewImage,
-      artists: artistNames,
-      releaseDate,
-      name,
-      href: external_urls.spotify
+  return items.map(
+    ({ album, id, external_urls, name, artists, popularity }) => {
+      const { release_date: releaseDate, images } = album
+      const previewImage = images.find((img) => img.url)?.url || ''
+      const artistNames = artists.map((artist) => artist.name).join(', ')
+      return {
+        id,
+        previewImage,
+        artists: artistNames,
+        releaseDate,
+        name,
+        href: external_urls.spotify,
+        popularity
+      }
     }
-  })
+  )
 }
 
 const setArtists = ({ items }: Artists): ItemProps[] => {
-  return items.map(({ external_urls, images, name, id }) => {
-    const previewImage = images.find((img) => img.url)?.url || ''
+  return items.map(
+    ({ external_urls, images, name, id, popularity, followers, genres }) => {
+      const previewImage = images.find((img) => img.url)?.url || ''
+      const genresString = genres.slice(0, 4).join(', ')
 
-    return {
-      href: external_urls.spotify,
-      previewImage,
-      id,
-      artists: name
+      return {
+        href: external_urls.spotify,
+        previewImage,
+        id,
+        artists: name,
+        popularity,
+        followers: followers.total,
+        genres: genresString
+      }
     }
-  })
+  )
 }
 
 const setAlbums = ({ items }: Albums): ItemProps[] => {
@@ -42,16 +51,19 @@ const setAlbums = ({ items }: Albums): ItemProps[] => {
       images,
       name,
       release_date: releaseDate,
-      total_tracks: totalTracks
+      total_tracks: totalTracks,
+      artists
     }) => {
       const previewImage = images.find((img) => img.url)?.url || ''
+      const artistNames = artists.map(({ name }) => name).join(', ')
       return {
         href: external_urls.spotify,
         id,
         previewImage,
         name,
         releaseDate,
-        totalTracks
+        totalTracks,
+        artists: artistNames
       }
     }
   )

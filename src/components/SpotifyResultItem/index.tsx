@@ -17,6 +17,9 @@ export interface Props {
   releaseDate?: string
   id: string
   totalTracks?: number
+  popularity?: number
+  followers?: number
+  genres?: string
 }
 
 function SpotifyResultItem({
@@ -25,18 +28,29 @@ function SpotifyResultItem({
   name,
   artists,
   releaseDate,
-  totalTracks
+  totalTracks,
+  followers,
+  popularity,
+  genres
 }: Props) {
   const objectDetails = {
-    name,
     artists,
+    name,
     releaseDate,
-    totalTracks
+    totalTracks,
+    followers,
+    popularity,
+    genres
   }
 
   return (
     <Container>
-      <Image height="300" src={previewImage} alt={artists || name} />
+      <Image
+        loading="lazy"
+        height="300"
+        src={previewImage}
+        alt={artists || name || genres}
+      />
       <Link href={href} target="_blank">
         <Details>
           {Object.entries(objectDetails).map(([key, value]) => {

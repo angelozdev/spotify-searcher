@@ -1,10 +1,11 @@
-import { useCallback, useReducer } from 'react'
+import { useCallback, useEffect, useReducer } from 'react'
 import { useRecoilValue } from 'recoil'
 import { AxiosError } from 'axios'
 
 import { authAtom } from 'recoilState/auth/atoms'
 import { search } from 'services/search'
 import { Albums, Artists, SearchOptions, Statuses, Tracks } from 'types'
+import { spotifyTypesSelector } from 'recoilState/spotifyTypes/selectors'
 
 interface InitialState {
   data: {
@@ -65,9 +66,10 @@ function reducer(
 
 function useSearch(): [
   InitialState,
-  (options: Omit<SearchOptions, 'token'>) => void
+  (options: Omit<SearchOptions, 'token'>) => Promise<unknown>
 ] {
   const { accessToken } = useRecoilValue(authAtom)
+  const type = useRecoilValue(spotifyTypesSelector)
   const [state, dispatch] = useReducer(reducer, initialState)
 
   if (!accessToken) {
@@ -75,18 +77,24 @@ function useSearch(): [
   }
 
   const getData = useCallback(
-    (options: Omit<SearchOptions, 'token'>) => {
+    async (options: Omit<SearchOptions, 'token'>) => {
       dispatch({ type: ActionTypes.GET_DATA_LOADING })
-      search({ ...options, token: accessToken })
+      return search({ ...options, token: accessToken })
         .then((data) => {
           dispatch({ type: ActionTypes.GET_DATA_SUCCESS, payload: data })
         })
         .catch((error) => {
           dispatch({ type: ActionTypes.GET_DATA_FAILURE, payload: error })
+          return Promise.reject(error)
         })
     },
     [accessToken]
   )
+
+  useEffect(() => {
+    getData({ query: 'chopin', type, limit: 6 })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return [state, getData]
 }

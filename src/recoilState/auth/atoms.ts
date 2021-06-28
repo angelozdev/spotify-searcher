@@ -1,16 +1,16 @@
-import { atom } from "recoil";
+import { atom } from 'recoil'
 
 interface Auth {
-  accessToken: string | null;
-  refreshToken: string | null;
-  isAuth: boolean;
+  accessToken: string | null
+  refreshToken: string | null
+  isAuth: boolean
 }
 
 export const authAtom = atom<Auth>({
-  key: "authAtom",
+  key: 'authAtom',
   default: {
     refreshToken: null,
     accessToken: null,
-    isAuth: false,
-  },
-});
+    isAuth: false
+  }
+})

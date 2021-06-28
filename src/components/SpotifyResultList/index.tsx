@@ -26,7 +26,10 @@ function SpotifyResultList({ data, title, type }: Props) {
               href,
               name,
               id,
-              totalTracks
+              totalTracks,
+              followers,
+              popularity,
+              genres
             }) => (
               <Item
                 key={id}
@@ -37,6 +40,9 @@ function SpotifyResultList({ data, title, type }: Props) {
                 href={href}
                 name={name}
                 totalTracks={totalTracks}
+                popularity={popularity}
+                followers={followers}
+                genres={genres}
               />
             )
           )}

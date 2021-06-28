@@ -1,6 +1,7 @@
-import { atom } from "recoil";
+import { atom } from 'recoil'
+import { Type } from 'types'
 
-export const spotifyTypesAtom = atom<string[]>({
-  default: [],
-  key: "spotifyTypesAtom",
-});
+export const spotifyTypesAtom = atom<Type[]>({
+  default: ['artist'],
+  key: 'spotifyTypesAtom'
+})

@@ -14,7 +14,7 @@ import { spotifyTypesSelector } from 'recoilState/spotifyTypes/selectors'
 
 function Home() {
   // states
-  const [searchValue, setSearchValue] = useState('')
+  const [searchValue, setSearchValue] = useState('chopin')
   const type = useRecoilValue(spotifyTypesSelector)
   const [{ data, status, error }, getData] = useSearch()
 
@@ -22,7 +22,7 @@ function Home() {
   const handleSearchSubmit = (event: FormEvent) => {
     event.preventDefault()
     if (!searchValue || !type) return
-    getData({ query: searchValue, type, limit: 9 })
+    getData({ query: searchValue, type, limit: 6 })
   }
 
   const handleSearchValueChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +49,10 @@ function Home() {
                 onChange={handleSearchValueChange}
               />
             </SearchInputContainer>
-            <Button disabled={status === 'LOADING' || !type} size="small">
+            <Button
+              disabled={status === 'LOADING' || !type || !searchValue}
+              size="small"
+            >
               Buscar...
             </Button>
           </SearchForm>
