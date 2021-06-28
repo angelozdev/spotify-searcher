@@ -18,14 +18,46 @@ export type Type =
 export type Statuses = 'IDLE' | 'LOADING' | 'FAILURE' | 'SUCCESS'
 
 interface SpotifyItem {
+  href: string
   limit: number
   next: string | null
   offset: number
   previous: string | null
   total: number
-  href: string
 }
-export type SpotifyTypes = Artists | Tracks
+export type SpotifyTypes = Artists | Tracks | Albums
+
+export interface Albums extends SpotifyItem {
+  items: {
+    album_type: string
+    artists: {
+      external_urls: {
+        spotify: string
+      }
+      href: string
+      id: string
+      name: string
+      type: string
+      uri: string
+    }[]
+    available_markets: string[]
+    external_urls: {
+      spotify: string
+    }
+    id: string
+    images: {
+      height: number
+      url: string
+      width: number
+    }[]
+    name: string
+    release_date: string
+    release_date_precision: string
+    total_tracks: number
+    type: string
+    uri: string
+  }[]
+}
 
 export interface Artists extends SpotifyItem {
   items: {

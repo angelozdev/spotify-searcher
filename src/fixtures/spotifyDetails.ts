@@ -19,6 +19,10 @@ const details: Details = {
   releaseDate: {
     title: () => 'Año: ',
     text: (releaseDate) => formatDate(releaseDate, { year: 'numeric' })
+  },
+  totalTracks: {
+    title: () => 'Número de pistas: ',
+    text: (number) => number
   }
 }
 export default details

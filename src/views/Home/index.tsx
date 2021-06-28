@@ -73,6 +73,11 @@ function Home() {
             title="Artistas"
             data={data?.artists}
           />
+          <SpotifyResultList
+            type={'album'}
+            title="Albumes"
+            data={data?.albums}
+          />
         </Fragment>
       )}
     </Fragment>

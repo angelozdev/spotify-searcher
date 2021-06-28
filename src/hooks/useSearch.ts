@@ -4,12 +4,13 @@ import { AxiosError } from 'axios'
 
 import { authAtom } from 'recoilState/auth/atoms'
 import { search } from 'services/search'
-import { Artists, SearchOptions, Statuses, Tracks } from 'types'
+import { Albums, Artists, SearchOptions, Statuses, Tracks } from 'types'
 
 interface InitialState {
   data: {
     artists?: Artists
     tracks?: Tracks
+    albums?: Albums
   } | null
   error: AxiosError | null
   status: Statuses

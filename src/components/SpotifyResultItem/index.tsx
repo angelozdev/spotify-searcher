@@ -16,6 +16,7 @@ export interface Props {
   artists?: string
   releaseDate?: string
   id: string
+  totalTracks?: number
 }
 
 function SpotifyResultItem({
@@ -23,12 +24,14 @@ function SpotifyResultItem({
   href,
   name,
   artists,
-  releaseDate
+  releaseDate,
+  totalTracks
 }: Props) {
   const objectDetails = {
     name,
     artists,
-    releaseDate
+    releaseDate,
+    totalTracks
   }
 
   return (
@@ -38,6 +41,10 @@ function SpotifyResultItem({
         <Details>
           {Object.entries(objectDetails).map(([key, value]) => {
             if (!value || !spotifyDetails[key]) return null
+            if (typeof value === 'number') {
+              value = value.toString()
+            }
+
             return (
               <Text key={key}>
                 <Strong>{spotifyDetails[key].title(value)}</Strong>
