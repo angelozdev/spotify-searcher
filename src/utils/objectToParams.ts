@@ -1,16 +1,16 @@
 function objectToParams(object: Object) {
-  const entries = Object.entries(object);
+  const entries = Object.entries(object)
   const params = entries
     .map(([key, value]) => {
-      if (value === null || value === undefined) return;
-      const encodedKey = encodeURIComponent(key);
-      const encodedValue = encodeURIComponent(value);
+      if (value === null || value === undefined) return ''
+      const encodedKey = encodeURIComponent(key)
+      const encodedValue = encodeURIComponent(value)
 
-      return `${encodedKey}=${encodedValue}`;
+      return `${encodedKey}=${encodedValue}`
     })
-    .join("&");
+    .join('&')
 
-  return params;
+  return params
 }
 
-export default objectToParams;
+export default objectToParams

@@ -1,7 +1,6 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 export const Details = styled.div`
-  visibility: hidden;
   padding: 1rem;
   background-color: white;
   position: absolute;
@@ -19,7 +18,6 @@ export const Container = styled.li`
   box-shadow: 0.1rem 0.1rem 0.5rem 0.1rem rgba(0, 0, 0, 0.2);
 
   &:hover ${Details} {
-    visibility: visible;
     opacity: 1;
   }
 `;

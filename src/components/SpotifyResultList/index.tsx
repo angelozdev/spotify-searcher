@@ -1,33 +1,81 @@
-import { List, Container } from "./spotifyResultList.styles";
-import { Wrapper, SpotifyResultItem as Item } from "components";
-import { Tracks } from "types";
+import { memo } from 'react'
 
-function SpotifyResultList({ data, title }: { data?: Tracks; title: string }) {
-  if (!data) return null;
+import { List, Container } from './spotifyResultList.styles'
+import { Wrapper, SpotifyResultItem as Item } from 'components'
+import { Tracks, Type, Artists, SpotifyTypes } from 'types'
+import { Props as ItemProps } from '../SpotifyResultItem'
+interface Props {
+  data?: SpotifyTypes
+  title: String
+  type: Type
+}
+
+const setItemsProps = (data: SpotifyTypes, type: Type): ItemProps[] => {
+  switch (type) {
+    case 'track': {
+      const { items } = data as Tracks
+      return items
+        .map(({ album, id, external_urls, name, artists }) => {
+          const { release_date: releaseDate, images } = album
+          const previewImage = images.find((img) => img.url)?.url || ''
+          const artistNames = artists.map((artist) => artist.name).join(', ')
+          return {
+            id,
+            previewImage,
+            artists: artistNames,
+            releaseDate,
+            name,
+            href: external_urls.spotify
+          }
+        })
+        .filter(({ previewImage }) => previewImage)
+    }
+
+    case 'artist':
+      const { items } = data as Artists
+      return items
+        .map(({ external_urls, images, name, id }) => {
+          const previewImage = images.find((img) => img.url)?.url || ''
+
+          return {
+            href: external_urls.spotify,
+            previewImage,
+            id,
+            artists: name
+          }
+        })
+        .filter(({ previewImage }) => previewImage)
+
+    default:
+      throw new Error('[COMPONENTS] SpotifyResultList: invalid type')
+  }
+}
+
+function SpotifyResultList({ data, title, type }: Props) {
+  if (!data) return null
+
   return (
     <Container>
       <Wrapper>
         <h1>{title}</h1>
         <List>
-          {data.items.map((item) => {
-            const { album, id, external_urls, name, artists } = item;
-            const previewImage = album.images.find((img) => img.url)?.url;
-            const artistName = artists.map((artist) => artist.name).join(", ");
-            if (!previewImage || !artistName) return;
-            return (
+          {setItemsProps(data, type).map(
+            ({ artists, previewImage, releaseDate, href, name, id }) => (
               <Item
                 key={id}
+                id={id}
+                artists={artists}
                 previewImage={previewImage}
-                href={external_urls.spotify}
+                releaseDate={releaseDate}
+                href={href}
                 name={name}
-                artist={artistName}
               />
-            );
-          })}
+            )
+          )}
         </List>
       </Wrapper>
     </Container>
-  );
+  )
 }
 
-export default SpotifyResultList;
+export default memo(SpotifyResultList)

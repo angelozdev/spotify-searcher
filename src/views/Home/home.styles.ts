@@ -44,15 +44,11 @@ export const SearchInputContainer = styled.div`
 
 export const SearchInput = styled.input`
   border: none;
-  color: gray;
+  color: #0a0a0a;
   outline: none;
   background: transparent;
   position: relative;
   z-index: 10;
-
-  &::placeholder {
-    color: #acabab;
-  }
 
   &:disabled {
     cursor: not-allowed;

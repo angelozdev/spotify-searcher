@@ -26,6 +26,10 @@ export const Label = styled.label`
 
 export const Checkbox = styled.input`
   cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 `;
 
 export const Text = styled.p`

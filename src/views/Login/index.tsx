@@ -1,8 +1,8 @@
-import { memo, useCallback, useEffect, useState } from "react";
-import { useLocation, useHistory } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { memo, useCallback, useEffect, useState } from 'react'
+import { useLocation, useHistory } from 'react-router-dom'
+import { useRecoilState } from 'recoil'
 
-import { Wrapper, Button } from "components";
+import { Wrapper, Button } from 'components'
 import {
   Container,
   Content,
@@ -11,75 +11,75 @@ import {
   Layout,
   Subtitle,
   Title,
-  Figure,
-} from "./login.styles";
-import { EnvironmentVariables, Routes } from "consts";
-import { getTokens } from "services/auth";
-import { authAtom } from "recoilState/auth/atoms";
+  Figure
+} from './login.styles'
+import { EnvironmentVariables, Routes } from 'consts'
+import { getTokens } from 'services/auth'
+import { authAtom } from 'recoilState/auth/atoms'
 
 function Home() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [auth, setAuth] = useRecoilState(authAtom);
-  const { search } = useLocation();
-  const history = useHistory();
+  const [isLoading, setIsLoading] = useState(true)
+  const [auth, setAuth] = useRecoilState(authAtom)
+  const { search } = useLocation()
+  const history = useHistory()
 
   const handleLoginClick = useCallback(() => {
-    const { REDIRECT_URI, CLIENT_ID } = EnvironmentVariables;
-    const SPOTIFY_URL = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+    const { REDIRECT_URI, CLIENT_ID } = EnvironmentVariables
+    const SPOTIFY_URL = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`
 
-    window.location.replace(SPOTIFY_URL);
-  }, []);
+    window.location.replace(SPOTIFY_URL)
+  }, [])
 
   const authenticateUser = async (code: string) => {
     try {
-      setIsLoading(true);
-      let options = { code, refresh_token: "" };
+      setIsLoading(true)
+      let options = { code, refresh_token: '' }
 
       if (auth.refreshToken) {
-        options = { ...options, refresh_token: auth.refreshToken };
+        options = { ...options, refresh_token: auth.refreshToken }
       }
 
-      const { accessToken, refreshToken } = await getTokens(options);
+      const { accessToken, refreshToken } = await getTokens(options)
       setAuth((prev) => ({
         isAuth: true,
         accessToken,
-        refreshToken: prev.refreshToken ?? refreshToken,
-      }));
+        refreshToken: prev.refreshToken ?? refreshToken
+      }))
 
       refreshToken &&
-        localStorage.setItem("refreshToken", JSON.stringify(refreshToken));
+        localStorage.setItem('refreshToken', JSON.stringify(refreshToken))
 
-      history.replace(Routes.SEARCH);
+      history.replace(Routes.SEARCH)
     } catch (error) {
-      setAuth((current) => ({ ...current, isAuth: false }));
-      console.error(error);
+      setAuth((current) => ({ ...current, isAuth: false }))
+      console.error(error)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const setCode = (spotifyCode: string) => {
     if (spotifyCode) {
-      return spotifyCode;
+      return spotifyCode
     } else if (auth.refreshToken) {
-      return auth.refreshToken;
+      return auth.refreshToken
     }
 
-    return null;
-  };
+    return null
+  }
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(search);
-    const spotifyCode = urlParams.get("code") || "";
+    const urlParams = new URLSearchParams(search)
+    const spotifyCode = urlParams.get('code') || ''
 
-    const code = setCode(spotifyCode);
+    const code = setCode(spotifyCode)
 
-    !code && setIsLoading(false);
-    code && authenticateUser(code);
-  }, [search]);
+    !code && setIsLoading(false)
+    code && authenticateUser(code)
+  }, [search])
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <p>Loading...</p>
   }
 
   return (
@@ -100,7 +100,7 @@ function Home() {
         </Layout>
       </Wrapper>
     </Container>
-  );
+  )
 }
 
-export default memo(Home);
+export default memo(Home)

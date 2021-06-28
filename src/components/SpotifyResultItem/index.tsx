@@ -1,35 +1,54 @@
+import { spotifyDetails } from 'fixtures'
+
 import {
   Container,
   Details,
   Image,
   Link,
   Strong,
-  Text,
-} from "./spotifyResultItem.styles";
+  Text
+} from './spotifyResultItem.styles'
 
-interface Props {
-  previewImage: string;
-  href: string;
-  name: string;
-  artist: string;
+export interface Props {
+  previewImage: string
+  href: string
+  name?: string
+  artists?: string
+  releaseDate?: string
+  id: string
 }
 
-function SpotifyResultItem({ previewImage, href, name, artist }: Props) {
+function SpotifyResultItem({
+  previewImage,
+  href,
+  name,
+  artists,
+  releaseDate
+}: Props) {
+  const objectDetails = {
+    name,
+    artists,
+    releaseDate
+  }
+
   return (
     <Container>
-      <Image width="300" src={previewImage} alt="" />
+      <Image height="300" src={previewImage} alt={artists || name} />
       <Link href={href} target="_blank">
         <Details>
-          <Text>
-            <Strong>Nombre: </Strong> {name}
-          </Text>
-          <Text>
-            <Strong>Artistas: </Strong> {artist}
-          </Text>
+          {Object.entries(objectDetails).map(([key, value]) => {
+            if (!value || !spotifyDetails[key]) return null
+            return (
+              <Text key={key}>
+                <Strong>{spotifyDetails[key].title(value)}</Strong>
+                <span>{spotifyDetails[key].text(value)}</span>
+              </Text>
+            )
+          })}
         </Details>
       </Link>
     </Container>
-  );
+  )
 }
 
-export default SpotifyResultItem;
+export default SpotifyResultItem
