@@ -30,7 +30,7 @@ function Filters() {
               type="checkbox"
               name={name}
               value={name}
-              defaultChecked={types.some((value) => value === name)}
+              defaultChecked={types.toString().includes(name)}
             />
           </Label>
         ))}
